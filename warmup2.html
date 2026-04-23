@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+</head>
+<body>
+<script>
+	
+
+	// thursday.js - Linked Build Q5 through Q11
+
+// ===========================
+// Q5: Inventory File - Start Fresh
+// ===========================
+
+const products = [
+  { name: "Indomie Noodles", category: "Food", price: 500, quantity: 20, minStockLevel: 10 },
+  { name: "Akabanga", category: "Condiments", price: 2500, quantity: 4, minStockLevel: 15 },
+  { name: "Inyange Water", category: "Beverages", price: 300, quantity: 0, minStockLevel: 5 },
+  { name: "Fanta Orange", category: "Beverages", price: 600, quantity: 70, minStockLevel: 20 },
+  { name: "Rwandan Tea", category: "Food", price: 1100, quantity: 55, minStockLevel: 25 }
+];
+
+function getTotalValue(product) {
+  return product.price * product.quantity;
+}
+
+function getDiscountedPrice(product) {
+  return product.price * 0.85;
+}
+
+function getStatus(product) {
+  if (product.quantity === 0) {
+    return "OUT OF STOCK";
+  } else if (product.quantity < product.minStockLevel) {
+    return "LOW STOCK";
+  } else if (product.quantity <= 50) {
+    return "Healthy";
+  } else {
+    return "Well stocked";
+  }
+}
+
+// Test each function manually
+console.log(getTotalValue(products[0]));
+console.log(getDiscountedPrice(products[0]));
+console.log(getStatus(products[1]));
+
+console.log("---");
+
+// ===========================
+// Q6: forEach Print Loop
+// ===========================
+
+products.forEach(function(product) {
+  console.log(
+    product.name + " (" + product.category + ") — " +
+    product.price + " RWF" +
+    " (discounted: " + getDiscountedPrice(product) + " RWF) — " +
+    product.quantity + " units — " +
+    getStatus(product)
+  );
+});
+
+console.log("---");
+
+// ===========================
+// Q7: Accumulation - totalInventoryValue, lowStockCount
+// ===========================
+
+let totalInventoryValue = 0;
+let lowStockCount = 0;
+
+products.forEach(function(product) {
+  totalInventoryValue = totalInventoryValue + getTotalValue(product);
+  if (product.quantity < product.minStockLevel) {
+    lowStockCount = lowStockCount + 1;
+  }
+});
+
+console.log("Total inventory value: " + totalInventoryValue + " RWF");
+console.log("Products needing restock: " + lowStockCount);
+
+console.log("---");
+
+// ===========================
+// Q8: Most and Least Expensive
+// ===========================
+
+let mostExpensive = products[0];
+let cheapest = products[0];
+
+products.forEach(function(product) {
+  if (product.price > mostExpensive.price) {
+    mostExpensive = product;
+  }
+  if (product.price < cheapest.price) {
+    cheapest = product;
+  }
+});
+
+console.log(
+  "Most expensive: " + mostExpensive.name + " — " +
+  mostExpensive.price + " RWF" +
+  " (discounted: " + getDiscountedPrice(mostExpensive) + " RWF)"
+);
+
+console.log(
+  "Cheapest: " + cheapest.name + " — " +
+  cheapest.price + " RWF" +
+  " (discounted: " + getDiscountedPrice(cheapest) + " RWF)"
+);
+
+console.log("---");
+
+// ===========================
+// Q9: Filter - Low Stock Products (Manual filter)
+// ===========================
+
+function getLowStockProducts(products) {
+  const result = [];
+  products.forEach(function(product) {
+    if (product.quantity < product.minStockLevel) {
+      result.push(product);
+    }
+  });
+  return result;
+}
+
+const lowStock = getLowStockProducts(products);
+
+console.log("── LOW STOCK ALERT ──");
+
+lowStock.forEach(function(product) {
+  console.log(product.name + " (" + product.category + ") — " + product.quantity + " units remaining");
+});
+
+console.log(lowStock.length + " product(s) need immediate attention.");
+
+console.log("---");
+
+// ===========================
+// Q10: Filter - By Category (Manual filter)
+// ===========================
+
+function getByCategory(products, category) {
+  const result = [];
+  products.forEach(function(product) {
+    if (product.category === category) {
+      result.push(product);
+    }
+  });
+  return result;
+}
+
+// Test with Beverages
+const beverages = getByCategory(products, "Beverages");
+
+console.log("── BEVERAGES ──");
+
+if (beverages.length === 0) {
+  console.log("No products found in category: Beverages");
+} else {
+  beverages.forEach(function(product) {
+    console.log(product.name + " — " + product.price + " RWF");
+  });
+  console.log(beverages.length + " product(s) in Beverages.");
+}
+
+// Test with Food
+const food = getByCategory(products, "Food");
+
+console.log("── FOOD ──");
+
+if (food.length === 0) {
+  console.log("No products found in category: Food");
+} else {
+  food.forEach(function(product) {
+    console.log(product.name + " — " + product.price + " RWF");
+  });
+  console.log(food.length + " product(s) in Food.");
+}
+
+console.log("---");
+
+// ===========================
+// Q11: Full Receipt
+// ===========================
+
+console.log("=" .repeat(37));
+console.log("=== KIGALI SHOP INVENTORY REPORT ===");
+console.log("=" .repeat(37));
+
+products.forEach(function(product) {
+  console.log(
+    product.name + " (" + product.category + ") — " +
+    getStatus(product) + " — " +
+    getTotalValue(product) + " RWF — " +
+    "disc: " + getDiscountedPrice(product) + " RWF"
+  );
+});
+
+console.log("─" .repeat(37));
+
+console.log("Total products: " + products.length);
+console.log("Total inventory value: " + totalInventoryValue + " RWF");
+console.log("Products needing restock: " + lowStockCount);
+console.log("Most expensive: " + mostExpensive.name + " (" + mostExpensive.price + " RWF)");
+console.log("Cheapest: " + cheapest.name + " (" + cheapest.price + " RWF)");
+
+console.log("─" .repeat(37));
+
+console.log("Insight: Inyange Water is out of stock.");
+console.log(" Reorder before the next market day.");
+
+console.log("=" .repeat(37));
+
+// ===========================
+// FRIDAY PREVIEW ANSWERS
+// ===========================
+
+// PREVIEW ANSWERS:
+// Question A:
+// .filter() replaces the manual pattern of creating an empty array, looping through
+// each element with forEach, checking a condition with an if statement, and pushing
+// matching items into the new array. It does all of this automatically and returns
+// the new filtered array.
+//
+// Question B:
+// When the function inside .filter() returns true, that element is included in the
+// new filtered array. When it returns false, that element is excluded (skipped).
+// .filter() collects all elements where the callback function returns true.
+
+</script>
+</body>
+</html>

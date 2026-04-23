@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+</head>
+<body>
+<script>  
+
+// Q1: Array Operations - indexing, updating, push, length
+
+const shop = [
+  { name: "Indomie", price: 500, quantity: 20 },
+  { name: "Akabanga", price: 2500, quantity: 6 },
+  { name: "Fanta", price: 600, quantity: 0 },
+];
+
+// 1. Print the name of the first product
+console.log(shop[0].name);
+
+// 2. Print the price of the last product using .length
+console.log(shop[shop.length - 1].price);
+
+// 3. Update the quantity of the second product to 100
+shop[1].quantity = 100;
+
+// 4. Push a new product object into the array
+console.log(shop.length);
+shop.push({ name: "Inyange", price: 300, quantity: 50 });
+console.log(shop.length);
+
+// 5. Print the updated second product in full
+console.log(shop[1]);
+
+console.log("---");
+
+// Q2: Functions - parameters, return, calling with object properties
+
+function describeProduct(product) {
+  return product.name + " — " + product.price + " RWF, " + product.quantity + " units";
+}
+
+function isAffordable(product, budget) {
+  return product.price <= budget;
+}
+
+// Call each function three times
+console.log(describeProduct({ name: "Indomie", price: 500, quantity: 20 }));
+console.log(describeProduct({ name: "Akabanga", price: 2500, quantity: 6 }));
+console.log(describeProduct({ name: "Fanta", price: 600, quantity: 0 }));
+
+console.log(isAffordable({ name: "Indomie", price: 500, quantity: 20 }, 1000));
+console.log(isAffordable({ name: "Akabanga", price: 2500, quantity: 6 }, 1000));
+console.log(isAffordable({ name: "Fanta", price: 600, quantity: 0 }, 1000));
+
+// Deliberately remove return keyword test (commented version)
+function isAffordableNoReturn(product, budget) {
+  product.price <= budget;
+  // No return keyword - function returns undefined
+}
+
+console.log("Without return keyword:");
+console.log(isAffordableNoReturn({ name: "Indomie", price: 500, quantity: 20 }, 1000));
+// Explanation: Without the return keyword, the function returns undefined by default.
+// The comparison still happens but the result is not sent back to the caller.
+// JavaScript functions without an explicit return always return undefined.
+
+console.log("---");
+
+// Q3: forEach - Accumulation pattern
+
+const sales = [
+  { product: "Indomie", unitsSold: 45, pricePerUnit: 500 },
+  { product: "Akabanga", unitsSold: 12, pricePerUnit: 2500 },
+  { product: "Fanta", unitsSold: 80, pricePerUnit: 600 },
+  { product: "Inyange", unitsSold: 0, pricePerUnit: 300 },
+];
+
+let totalRevenue = 0;
+let zeroSalesCount = 0;
+let topSeller = sales[0];
+let topRevenue = sales[0].unitsSold * sales[0].pricePerUnit;
+
+sales.forEach(function(sale) {
+  const revenue = sale.unitsSold * sale.pricePerUnit;
+  console.log(sale.product + ": " + revenue + " RWF");
+  
+  totalRevenue = totalRevenue + revenue;
+  
+  if (sale.unitsSold === 0) {
+    zeroSalesCount = zeroSalesCount + 1;
+  }
+  
+  if (revenue > topRevenue) {
+    topSeller = sale;
+    topRevenue = revenue;
+  }
+});
+
+console.log("Total revenue: " + totalRevenue + " RWF");
+console.log("Products with zero sales: " + zeroSalesCount);
+console.log("Top seller: " + topSeller.product + " (" + topRevenue + " RWF)");
+
+console.log("---");
+
+// Q4: forEach + Functions - combining functions and loops
+
+function getRevenue(sale) {
+  return sale.unitsSold * sale.pricePerUnit;
+}
+
+function getSalesStatus(sale) {
+  if (sale.unitsSold === 0) {
+    return "No sales";
+  } else if (sale.unitsSold < 20) {
+    return "Low";
+  } else if (sale.unitsSold < 60) {
+    return "Good";
+  } else {
+    return "Excellent";
+  }
+}
+
+// First forEach - print summary using functions
+sales.forEach(function(sale) {
+  console.log(sale.product + " — " + getRevenue(sale) + " RWF — " + getSalesStatus(sale));
+});
+
+// Second forEach - accumulate total revenue and excellent count
+let totalRevenue2 = 0;
+let excellentCount = 0;
+
+sales.forEach(function(sale) {
+  totalRevenue2 = totalRevenue2 + getRevenue(sale);
+  if (getSalesStatus(sale) === "Excellent") {
+    excellentCount = excellentCount + 1;
+  }
+});
+
+console.log("Total revenue: " + totalRevenue2 + " RWF");
+console.log("Excellent performers: " + excellentCount);
+
+</script>
+</body>
+</html>
